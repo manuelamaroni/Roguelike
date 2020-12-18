@@ -13,11 +13,11 @@ cell **load_map(int *size, char filename[]); //loads the map from file, returns 
 
 void visualize_map(cell **map, int size, int px, int py, int win_size); //prints the map
 
-cella **initializemap(cell **map, int size); //initializes the map to 1
+cell **initializemap(cell **map, int size); //initializes the map to 1
 
 int generate_random(cell **map, int size, int x, int y); //generates a random number based on the player's position
 
-cella **generate_map(cell **map, int size, int x, int y); // generates the map randomly and returns it
+cell **generate_map(cell **map, int size, int x, int y); // generates the map randomly and returns it
 
 void save_map(cell **map, int size, char filename[]); //saves the map on a .txt file named filename
 
