@@ -1,3 +1,3 @@
 # Roguelike
 
-This is a roguelike game. You'll need a gcc compiler (or any compiler).
+This is a roguelike game written in C language. You'll need a gcc compiler (or any compiler).
