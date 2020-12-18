@@ -43,7 +43,7 @@ int main()
     }while(size%2==0 || size<=9);
 
 
-    map = inizializemap(map, size);
+    map = initializemap(map, size);
 
     map = generate_map(map, size, 1, 1);
 
