@@ -586,7 +586,7 @@ void movement(cell **map, int size, int xp, int yp, int xe, int ye, int moves, i
       else
       {
         printf("\nMOVE NOT AVAILABLE, you cannot go through walls!\n");
-        mossaprec = 0;
+        precmove = 0;
       }
     }
     else if(move == 'a') //left
