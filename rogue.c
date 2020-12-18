@@ -62,14 +62,14 @@ void visualize_map(cell **map, int size, int px, int py, int win_size)
   }
 }
 
-cella **initializemap(cell **map, int size)
+cell **initializemap(cell **map, int size)
 {
   int i, j;
 
-  map = calloc(size, sizeof(cella*));
+  map = calloc(size, sizeof(cell*));
   for(i=0;i<size;i++)
   {
-    map[i] = calloc(size, sizeof(cella));
+    map[i] = calloc(size, sizeof(cell));
   }
 
   for(i=0;i<size;i++)
@@ -307,7 +307,7 @@ int go_back(cell **map, int size)
   return out;
 }
 
-cella **generate_map(cell **map, int size, int x, int y)
+cell **generate_map(cell **map, int size, int x, int y)
 {
   int moves, random;
   map[x][y].visited = 1;
@@ -521,7 +521,7 @@ void movement(cell **map, int size, int xp, int yp, int xe, int ye, int moves, i
   }
   else
   {
-    mosse++;
+    moves++;
 
     printf("\nMove number %d", moves);
     do{
@@ -566,7 +566,7 @@ void movement(cell **map, int size, int xp, int yp, int xe, int ye, int moves, i
       else
       {
         printf("\nMOVE NOT AVAILABLE, you cannot go through walls!\n");
-        mossaprec = 0;
+        precmove = 0;
       }
     }
     else if(move == 'd') //right
