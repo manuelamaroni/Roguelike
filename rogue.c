@@ -1,8 +1,8 @@
 #include"rogue.h"
 
-cella **load_map(int *size, char filename[])
+cell **load_map(int *size, char filename[])
 {
-  cella **map;
+  cell **map;
   int i, j;
   FILE *f;
 
@@ -10,10 +10,10 @@ cella **load_map(int *size, char filename[])
 
   if(f!=NULL)
   {
-    map = calloc(*size,sizeof(cella*));
+    map = calloc(*size,sizeof(cell*));
     for (i=0; i<*size; i++)
     {
-      map[i] = calloc(*size,sizeof(cella));
+      map[i] = calloc(*size,sizeof(cell));
     }
     fscanf(f, "%d", size);
     for(i=0;i<*size;i++)
@@ -25,14 +25,14 @@ cella **load_map(int *size, char filename[])
     }
   }
   else
-    printf("Errore! Non sono riuscito ad aprire il file.\n");
+    printf("Error! Could not open the file.\n");
 
   fclose(f);
 
   return map;
 }
 
-void visualize_map(cella **map, int size, int px, int py, int win_size)
+void visualize_map(cell **map, int size, int px, int py, int win_size)
 {
   int i,j;
 
@@ -62,7 +62,7 @@ void visualize_map(cella **map, int size, int px, int py, int win_size)
   }
 }
 
-cella **inizializemap(cella **map, int size)
+cella **initializemap(cell **map, int size)
 {
   int i, j;
 
@@ -84,11 +84,11 @@ cella **inizializemap(cella **map, int size)
   return map;
 }
 
-int generate_random(cella **map, int size, int x, int y)
+int generate_random(cell **map, int size, int x, int y)
 {
-  int random; //0 -> basso; 1 -> alto; 2 -> destra; 3 -> sinistra
+  int random; //0 -> down; 1 -> up; 2 -> right; 3 -> left
 
-  if(x+2==size && y-2<0) //sono nell'angolo in basso a sinistra
+  if(x+2==size && y-2<0) //lower left corner
     {
       if(map[x-2][y].visited!=1 && map[x][y+2].visited!=1)
         random = rand()%2+1;
@@ -97,7 +97,7 @@ int generate_random(cella **map, int size, int x, int y)
       else if(map[x][y+2].visited==1)
         random = 1;
     }
-  else if(x+2==size && y+2==size) //sono nell'angolo in basso a destra
+  else if(x+2==size && y+2==size) //lower right corner
   {
     if(map[x][y-2].visited!=1 && map[x-2][y].visited!=1)
     {
@@ -110,7 +110,7 @@ int generate_random(cella **map, int size, int x, int y)
     else if(map[x][y-2].visited==1)
       random = 1;
   }
-  else if(x+2==size) //sono nell'ultima linea in basso
+  else if(x+2==size) //last lower row
   {
     if(map[x][y-2].visited!=1 && map[x-2][y].visited!=1 && map[x][y+2].visited!=1)
       random = rand()%3+1;
@@ -131,7 +131,7 @@ int generate_random(cella **map, int size, int x, int y)
       }while(random==2);
     }
   }
-  else if(x-2<0 && y+2==size) //sono nell'angolo in alto a destra
+  else if(x-2<0 && y+2==size) //upper right corner
   {
     if(map[x+2][y].visited!=1 && map[x][y-2].visited!=1)
     {
@@ -144,7 +144,7 @@ int generate_random(cella **map, int size, int x, int y)
     else if(map[x][y-2].visited==1)
       random = 0;
   }
-  else if(x-2<0 && y-2<0) //sono nell'angolo in alto a sinistra
+  else if(x-2<0 && y-2<0) //upper left corner
   {
     if(map[x][y+2].visited!=1 && map[x+2][y].visited!=1)
     {
@@ -157,7 +157,7 @@ int generate_random(cella **map, int size, int x, int y)
     else if(map[x+2][y].visited==1)
       random = 2;
   }
-  else if(x-2<0) //sono nella prima riga in alto
+  else if(x-2<0) //first upper row
   {
     if(map[x][y+2].visited!=1 && map[x+2][y].visited!=1 && map[x][y-2].visited!=1)
     {
@@ -186,7 +186,7 @@ int generate_random(cella **map, int size, int x, int y)
       }while(random==1);
     }
   }
-  else if(y+2==size) //sono nell'ultima colonna a destra
+  else if(y+2==size) //last right column
   {
     if(map[x+2][y].visited!=1 && map[x][y-2].visited!=1 && map[x-2][y].visited!=1)
     {
@@ -215,7 +215,7 @@ int generate_random(cella **map, int size, int x, int y)
       }while(random==1 || random==2);
     }
   }
-  else if(y-2<0) //sono nella prima colonna a sinistra
+  else if(y-2<0) //first left column
   {
     if(map[x-2][y].visited!=1 && map[x][y+2].visited!=1 && map[x+2][y].visited!=1)
       random = rand()%3;
@@ -236,7 +236,7 @@ int generate_random(cella **map, int size, int x, int y)
     else if(map[x+2][y].visited==1)
       random = rand()%2+1;
   }
-  else //sono in mezzo alla mappa
+  else //in the middle
   {
     if(map[x-2][y].visited!=1 && map[x][y+2].visited!=1 && map[x+2][y].visited!=1 && map[x][y-2].visited!=1)
       random = rand()%4;
@@ -293,34 +293,34 @@ int generate_random(cella **map, int size, int x, int y)
   return random;
 }
 
-int torno_indietro(cella **map, int size)
+int go_back(cell **map, int size)
 {
-  int i, j, ritorna=0;
+  int i, j, out=0;
   for(i=1;i<size;i+=2)
   {
     for(j=1;j<size;j+=2)
     {
       if(map[i][j].visited!=1)
-        ritorna = 1;
+        out = 1;
     }
   }
-  return ritorna;
+  return out;
 }
 
-cella **generate_map(cella **map, int size, int x, int y)
+cella **generate_map(cell **map, int size, int x, int y)
 {
-  int mosse, random;
+  int moves, random;
   map[x][y].visited = 1;
   map[x][y].value = 0;
-  mosse = torno_indietro(map, size);
-  if(mosse==0) //non ci sono più mosse disponobili nemmeno se torno indietro
+  moves = go_back(map, size);
+  if(moves==0) //there are no more moves available, not even if I go back
     return map;
-  else //sono bloccata da qualche parte, posso tornare indietro e fare altre mosse
+  else //I am blocked somewhere, I can go back and make other moves
   {
-    //sono negli angoli e ho visitato le celle adiacenti
+    //I am in the corners and I have visited the adjacent cells
     if(((x==1 && y==1) && (map[x][y+2].visited==1 && map[x+2][y].visited==1)) || ((x==1 && y==size-2) && (map[x+2][y].visited==1 && map[x][y-2].visited==1)) || ((x==size-2 && y==1) && (map[x-2][y].visited==1 &&map[x][y+2].visited==1)) || ((x==size-2 && y==size-2) && (map[x-2][y].visited==1 && map[x][y-2].visited==1)))
       return generate_map(map, size, map[x][y].xbefore, map[x][y].ybefore);
-    //sono negli angoli ma non ho visitato le celle adiacenti
+    //I am in the corners but I have not visited the adjacent cells
     else if((x==1 && y==1) || (x==1 && y==size-2) || (x==size-2 && y==1) || (x==size-2 && y==size-2))
     {
       random = generate_random(map, size, x, y);
@@ -360,10 +360,10 @@ cella **generate_map(cella **map, int size, int x, int y)
 
       return generate_map(map, size, x, y);
     }
-    //sono ai lati e ho visitato le celle adiacenti
+    //I am on the sides and I have visited the adjacent cells
     else if((x==1 && (map[x][y+2].visited==1 && map[x+2][y].visited==1 && map[x][y-2].visited==1)) || (x==size-2 && (map[x][y+2].visited==1 && map[x-2][y].visited==1 && map[x][y-2].visited==1)) || (y==1 && (map[x-2][y].visited==1 && map[x][y+2].visited==1 && map[x+2][y].visited==1)) || (y==size-2 && (map[x-2][y].visited==1 && map[x][y-2].visited==1 && map[x+2][y].visited==1)))
       return generate_map(map, size, map[x][y].xbefore, map[x][y].ybefore);
-    //sono ai lati ma non ho visitato le celle adiacenti
+    //I am on the sides but I have not visited the adjacent cells
     else if(x==1 || x==size-2 || y==1 || y==size-2)
     {
       random = generate_random(map, size, x, y);
@@ -403,7 +403,7 @@ cella **generate_map(cella **map, int size, int x, int y)
 
       return generate_map(map, size, x, y);
     }
-    //sono all'interno della mappa ma ho visitato tutte le celle adiacenti
+    //I am in the middle of the map and I have visited the adjacent cells
     else if(map[x+2][y].visited==1 && map[x-2][y].visited==1 && map[x][y+2].visited==1 && map[x][y-2].visited==1)
       return generate_map(map, size, map[x][y].xbefore, map[x][y].ybefore);
     else
@@ -448,11 +448,11 @@ cella **generate_map(cella **map, int size, int x, int y)
   }
 }
 
-void insert_player_exit_enemies(cella **map, int size)
+void insert_player_exit_enemies(cell **map, int size)
 {
   int xp, yp, xe, ye, xn, yn, i;
 
-  //inserisco il player
+  //inserts the player
   do{
     xp = rand()%size;
     yp = rand()%size;
@@ -460,7 +460,7 @@ void insert_player_exit_enemies(cella **map, int size)
 
   map[xp][yp].value = 2;
 
-  //inserisco l'uscita
+  //inserts the exit
   do{
     xe = rand()%size;
     ye = rand()%size;
@@ -468,7 +468,7 @@ void insert_player_exit_enemies(cella **map, int size)
 
   map[xe][ye].value = 3;
 
-  //inserisco i nemici
+  //inserts the enemies
   for(i=0;i<size/4;i++)
   {
     do{
@@ -480,7 +480,7 @@ void insert_player_exit_enemies(cella **map, int size)
   }
 }
 
-void save_map(cella **map, int size, char filename[])
+void save_map(cell **map, int size, char filename[])
 {
   FILE *f;
   int i, j;
@@ -499,14 +499,14 @@ void save_map(cella **map, int size, char filename[])
     }
   }
   else
-    printf("Errore! Non sono riuscito ad aprire il file.\n");
+    printf("Error! Could not open the file.\n");
 }
 
-void movimento(cella **map, int size, int xp, int yp, int xe, int ye, int mosse, int mossaprec)
+void movement(cell **map, int size, int xp, int yp, int xe, int ye, int moves, int precmove)
 {
-  char move, abbandona, salva, filename[20];
+  char move, quit, save, filename[20];
 
-  if(mossaprec==1) //se la mossa precedente era valida, stampo la mappa aggiornata, altrimenti no
+  if(precmove==1) //if the precedent move was valid, stamps the updated map
   {
     if(size<20)
       visualize_map(map, size, xp, yp, size);
@@ -516,151 +516,151 @@ void movimento(cella **map, int size, int xp, int yp, int xe, int ye, int mosse,
 
   if(xp==xe && yp==ye)
   {
-    printf("\nCOMPLIMENTI, HAI RAGGIUNTO L'USCITA IN %d MOSSE!\n\n", mosse);
+    printf("\nCONGRATULATIONS, YOU HAVE REACHED RHE EXIT IN %d MOVES!\n\n", moves);
     return;
   }
   else
   {
     mosse++;
 
-    printf("\nMossa numero %d", mosse);
+    printf("\nMove number %d", moves);
     do{
-      printf("\nScegli il comando [w]->su [a]->sinistra [s]->giu [d]->destra [q]->abbandona:\n");
+      printf("\nChoose the letter: [w]->up [a]->left [s]->down [d]->right [q]->quit:\n");
       scanf("%c%*c", &move);
     }while(move!='w' && move!='s' && move!='d' && move!='a' && move!='q');
 
-    if(move == 'w') //su
+    if(move == 'w') //up
     {
       if(map[xp-1][yp].value==0 || map[xp-1][yp].value==3)
       {
         map[xp-1][yp].value = 2;
         map[xp][yp].value = 0;
         xp--;
-        mossaprec = 1;
+        precmove = 1;
       }
       else if(map[xp-1][yp].value==4)
       {
-        printf("\nHAI PERSO! Un nemico ti ha ucciso.\n");
+        printf("\nYOU LOST! An enemy has killed you.\n");
         return;
       }
       else
       {
-        printf("\nMOSSA NON DISPONIBILE, non puoi passare in mezzo ai muri!\n");
-        mossaprec = 0;
+        printf("\nMOVE NOT AVAILABLE, you cannot go through walls!\n");
+        precmove = 0;
       }
     }
-    else if(move == 's') //giù
+    else if(move == 's') //down
     {
       if(map[xp+1][yp].value==0 || map[xp+1][yp].value==3)
       {
         map[xp+1][yp].value = 2;
         map[xp][yp].value = 0;
         xp++;
-        mossaprec = 1;
+        precmove = 1;
       }
       else if(map[xp+1][yp].value==4)
       {
-        printf("\nHAI PERSO! Un nemico ti ha ucciso.\n");
+        printf("\nYOU LOST! An enemy has killed you.\n");
         return;
       }
       else
       {
-        printf("\nMOSSA NON DISPONIBILE, non puoi passare in mezzo ai muri!\n");
+        printf("\nMOVE NOT AVAILABLE, you cannot go through walls!\n");
         mossaprec = 0;
       }
     }
-    else if(move == 'd') //destra
+    else if(move == 'd') //right
     {
       if(map[xp][yp+1].value==0 || map[xp][yp+1].value==3)
       {
         map[xp][yp+1].value = 2;
         map[xp][yp].value = 0;
         yp++;
-        mossaprec = 1;
+        precmove = 1;
       }
       else if(map[xp][yp+1].value==4)
       {
-        printf("\nHAI PERSO! Un nemico ti ha ucciso.\n");
+        printf("\nYOU LOST! An enemy has killed you.\n");
         return;
       }
       else
       {
-        printf("\nMOSSA NON DISPONIBILE, non puoi passare in mezzo ai muri!\n");
+        printf("\nMOVE NOT AVAILABLE, you cannot go through walls!\n");
         mossaprec = 0;
       }
     }
-    else if(move == 'a') //sinistra
+    else if(move == 'a') //left
     {
       if(map[xp][yp-1].value==0 || map[xp][yp-1].value==3)
       {
         map[xp][yp-1].value = 2;
         map[xp][yp].value = 0;
         yp--;
-        mossaprec = 1;
+        precmove = 1;
       }
       else if(map[xp][yp-1].value==4)
       {
-        printf("\nHAI PERSO! Un nemico ti ha ucciso.\n");
+        printf("\nYOU LOST! An enemy has killed you.\n");
         return;
       }
       else
       {
-        printf("\nMOSSA NON DISPONIBILE, non puoi passare in mezzo ai muri!\n");
-        mossaprec = 0;
+        printf("\nMOVE NOT AVAILABLE, you cannot go through walls!\n");
+        precmove = 0;
       }
     }
     else if(move == 'q')
     {
       do{
-        printf("\nSei sicuro di voler abbandonare? [y/n]\n");
-        scanf("%c%*c", &abbandona);
-      }while(abbandona!='y' && abbandona!='n');
-      if(abbandona=='y')
+        printf("\nAre you sure you want to quit? [y/n]\n");
+        scanf("%c%*c", &quit);
+      }while(quit!='y' && quit!='n');
+      if(quit=='y')
       {
         do{
-          printf("\nVuoi salvare i progressi della partita? [y/n]\n");
-          scanf("%c%*c", &salva);
-        }while(salva!='y' && salva!='n');
-        if(salva=='y')
+          printf("\nDo you want to save the progress of the game? [y/n]\n");
+          scanf("%c%*c", &save);
+        }while(save!='y' && save!='n');
+        if(save=='y')
         {
-          printf("\nInserisci il nome del file su cui salvare la mappa:\n");
+          printf("\nEnter the name of the file on which you want to save the map:\n");
           scanf("%s", filename);
           save_map(map, size, filename);
         }
         return;
       }
       else
-        mossaprec = 1;
+        precmove = 1;
     }
 
-    //muovo i nemici
+    //moves the enemies
     move_enemies(map, size);
 
-    return movimento(map, size, xp, yp, xe, ye, mosse, mossaprec);
+    return movement(map, size, xp, yp, xe, ye, moves, precmove);
   }
 }
 
-void move_enemies(cella **map, int size)
+void move_enemies(cell **map, int size)
 {
   int i, j, k=0, xn[size/4], yn[size/4], move, temp, xp, yp, xe, ye;
 
-  //trovo dove sono i nemici, il giocatore e l'uscita
+  //finds where the enemies, the player and the exit are
   for(i=1;i<size-1;i++)
   {
     for(j=1;j<size-1;j++)
     {
-      if(map[i][j].value==4) //nemici
+      if(map[i][j].value==4) //enemies
       {
         xn[k] = i;
         yn[k] = j;
         k++;
       }
-      else if(map[i][j].value==2) //giocatore
+      else if(map[i][j].value==2) //player
       {
         xp = i;
         yp = j;
       }
-      else if(map[i][j].value==3) //uscita
+      else if(map[i][j].value==3) //exit
       {
         xe = i;
         ye = j;
@@ -668,7 +668,7 @@ void move_enemies(cella **map, int size)
     }
   }
 
-  //muovo i nemici
+  //moves the enemies
   for(i=0;i<k;i++)
   {
     int x, y;
@@ -676,22 +676,22 @@ void move_enemies(cella **map, int size)
     y = yn[i];
 
     move = rand()%4;
-    if(move==0 && x!=1 && x!=xp && y!=yp && x!=xe && y!=ye) //non deve andare sopra il giocatore o sopra l'uscita
+    if(move==0 && x!=1 && x!=xp && y!=yp && x!=xe && y!=ye) //it cannot go over the player or the exit
     {
       map[x][y].value = 0;
       x--;
     }
-    else if(move==1 && y!=size-2 && x!=xp && y!=yp && x!=xe && y!=ye) //non deve andare sopra il giocatore o sopra l'uscita
+    else if(move==1 && y!=size-2 && x!=xp && y!=yp && x!=xe && y!=ye) //it cannot go over the player or the exit
     {
       map[x][y].value = 0;
       y++;
     }
-    else if(move==2 && x!=size-2 && x!=xp && y!=yp && x!=xe && y!=ye) //non deve andare sopra il giocatore o sopra l'uscita
+    else if(move==2 && x!=size-2 && x!=xp && y!=yp && x!=xe && y!=ye) //it cannot go over the player or the exit
     {
       map[x][y].value = 0;
       x++;
     }
-    else if(move==3 && y!=1 && x!=xp && y!=yp && x!=xe && y!=ye) //non deve andare sopra il giocatore o sopra l'uscita
+    else if(move==3 && y!=1 && x!=xp && y!=yp && x!=xe && y!=ye) //it cannot go over the player or the exit
     {
       map[x][y].value = 0;
       y--;
