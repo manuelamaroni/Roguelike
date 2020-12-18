@@ -2,26 +2,25 @@
 
 int main()
 {
-  char scelta, filename[20], scelta2;
+  char choice, filename[20], choice2;
   int size, i, j, xp, yp, xe, ye;
   FILE *f;
-  cella **map;
+  cell **map;
   srand(time(NULL));
 
-  printf("\n-COME SI GIOCA-\n\n");
-  printf("Lo scopo del gioco e' raggiungere l'uscita del labirinto evitando i nemici. Se il giocatore occupa la stessa cella di un nemico, verra' ucciso. Il giocatore NON puo' passare attraverso i muri, i nemici si'. I nemici si muovono casualmente a ogni turno e scavano i muri quando ci passano attraverso, creando altri passaggi. Il labirinto e' centrato sul giocatore, non ti sara' quindi possibile vedere l'intero labirinto. \n");
-  printf("All'inizio del gioco, verra' chiesto all'utente se vuole caricare la mappa da file o se preferisce generarla casualmente, il file deve essere salvato nella stessa cartella del programma. Se si decide di generare casualmente la mappa, sara' necessario inserire la sua dimensione, che dovra' dispari e maggiore di 9. Verra' successivamente chiesto se si vuole salvare la mappa generata su file. Se non presente, il file verra' creato nella stessa cartella in cui si trova il programma. \n");
-  printf("In caso si decida di abbandonare la partita, il programma chiedera' se si vogliono salvare i progressi della partita e, in caso affermativo, bisognera' inserire il nome del file su cui salvarli. Questo file puo' essere lo stesso su cui si era deciso di salvare la mappa iniziale oppure un altro.\n");
-  printf("Si puo' uscire dal programma in qualsiasi momento, senza possibilita' di salvare i progressi, premendo ctrl+c.\n");
+  printf("\n-HOW TO PLAY-\n\n");
+  printf("The goal of the game is to reach the exit of the maze avoiding the enemies.If the player occupies the same cell as an enemy, they will be killed. The player CANNOT go through walls, the enemies can. The enemies move randomly at the end of every turn and dig the walls as they pass through them, creating new passages. The maze is centred on the player, therefore you will not be able to see the whole maze. \n");
+  printf("At the beginnning of the game, you will be asked if you want to load the map from file or if you prefer to generate it randomly, the file must be saved in the same folder as the program. If you decide to generate the map randomly, you will be asked to enter its dimension, which must be an uneven number greater than 9. Next, you will be asked whether or not you want to save the generated map on file. If it is not an already existing file, it will be automatically created in the same folder of the program.\n");
+  printf("If you want to quit the game, the program will ask you if you want to save the progress of the game and, if that is the case, you will have to enter the name of the file. This file can be the same as the one on which you had decided to save the map or not.\n");
 
   do{
-    printf("\nInserire 'c' se si vuole caricare la mappa da file, inserire 'g' se si vuole generare casualmente la mappa:\n");
-    scanf("%c%*c", &scelta);
-  }while(scelta!='c' && scelta!='g');
+    printf("\nEnter 'c' if you want to load the map from file, enter 'g' if you want to generate it randomly:\n");
+    scanf("%c%*c", &choice);
+  }while(choice!='c' && choice!='g');
 
-  if(scelta=='c')
+  if(choice=='c')
   {
-    printf("Inserire il nome del file contenente la mappa:\n");
+    printf("Enter the name of the file containing the map:\n");
     scanf("%s%*c", filename);
 
     f=fopen(filename, "r");
