@@ -31,14 +31,14 @@ int main()
       map = load_map(&size, filename);
     }
     else
-      printf("Errore in apertura del file %s", filename);
+      printf("Error! Could not open the file %s.", filename);
 
     fclose(f);
   }
-  else if(scelta=='g')
+  else if(choice=='g')
   {
     do{
-      printf("Inserire la dimensione della mappa (deve essere dispari e maggiore di 9):\n");
+      printf("Enter the dimension of the map (it must be uneven and greater than 9):\n");
       scanf("%d%*c", &size);
     }while(size%2==0 || size<=9);
 
@@ -50,13 +50,13 @@ int main()
     insert_player_exit_enemies(map, size);
 
     do{
-      printf("Vuoi salvare la mappa su un file?[y/n]\n");
-      scanf("%c%*c", &scelta2);
-    }while(scelta2!='y' && scelta2!='n');
+      printf("Do you want to save the map on file? [y/n]\n");
+      scanf("%c%*c", &choice2);
+    }while(choice2!='y' && choice2!='n');
 
-    if(scelta2=='y')
+    if(choice2=='y')
     {
-      printf("Inserire il nome del file in cui salvare la mappa:\n");
+      printf("Enter the name of the file in which you want to save the map:\n");
       scanf("%s%*c", filename);
       save_map(map, size, filename);
     }
@@ -66,12 +66,12 @@ int main()
   {
     for(j=0;j<size;j++)
     {
-      if(map[i][j].value==2) //trovo la posizione del giocatore
+      if(map[i][j].value==2) //finds the position of the player
       {
         xp = i;
         yp = j;
       }
-      else if(map[i][j].value==3) //trovo la posizione dell'uscita
+      else if(map[i][j].value==3) //finds the position of the exit
       {
         xe = i;
         ye = j;
@@ -79,10 +79,10 @@ int main()
     }
   }
 
-  printf("\nLegenda:\nP -> giocatore\nN -> nemico\nE -> uscita\n# -> muro\n  -> spazio percorribile\n");
-  printf("\nPer muoversi inserire i seguenti comandi:\nw -> su\ns -> giu\nd -> destra\na -> sinistra\nq -> abbandona\n\nPremere invio per confermare la mossa. Potrebbe essere necessario inserire due volte il comando prima di premere invio\n");
+  printf("\nLegend:\nP -> player\nN -> enemy\nE -> exit\n# -> wall\n  -> viable passage\n");
+  printf("\nEnter the following letters to move:\nw -> up\ns -> down\nd -> right\na -> left\nq -> quit\n\nPress enter to confirm your move. It may be necessary to insert the same letter twice before before pressing enter.\n");
 
-  movimento(map, size, xp, yp, xe, ye, 0, 1);
+  movement(map, size, xp, yp, xe, ye, 0, 1);
 
   return 0;
 }
