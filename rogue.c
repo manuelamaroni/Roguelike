@@ -505,14 +505,16 @@ void save_map(cell **map, int size, char filename[])
 void movement(cell **map, int size, int xp, int yp, int xe, int ye, int moves, int precmove)
 {
   char move, quit, save, filename[20];
+  
+  CLEARSCREEN;
 
-  if(precmove==1) //if the precedent move was valid, stamps the updated map
-  {
-    if(size<20)
-      visualize_map(map, size, xp, yp, size);
-    else
-      visualize_map(map, size, xp, yp, 20);
-  }
+   if(size<20)
+     visualize_map(map, size, xp, yp, size);
+   else
+     visualize_map(map, size, xp, yp, 20);
+  
+  if(precmove == 0)
+      printf("\nMOVE NOT AVAILABLE, you cannot go through walls!\n");
 
   if(xp==xe && yp==ye)
   {
@@ -544,10 +546,7 @@ void movement(cell **map, int size, int xp, int yp, int xe, int ye, int moves, i
         return;
       }
       else
-      {
-        printf("\nMOVE NOT AVAILABLE, you cannot go through walls!\n");
         precmove = 0;
-      }
     }
     else if(move == 's') //down
     {
@@ -564,10 +563,7 @@ void movement(cell **map, int size, int xp, int yp, int xe, int ye, int moves, i
         return;
       }
       else
-      {
-        printf("\nMOVE NOT AVAILABLE, you cannot go through walls!\n");
         precmove = 0;
-      }
     }
     else if(move == 'd') //right
     {
@@ -584,10 +580,7 @@ void movement(cell **map, int size, int xp, int yp, int xe, int ye, int moves, i
         return;
       }
       else
-      {
-        printf("\nMOVE NOT AVAILABLE, you cannot go through walls!\n");
         precmove = 0;
-      }
     }
     else if(move == 'a') //left
     {
@@ -604,10 +597,7 @@ void movement(cell **map, int size, int xp, int yp, int xe, int ye, int moves, i
         return;
       }
       else
-      {
-        printf("\nMOVE NOT AVAILABLE, you cannot go through walls!\n");
         precmove = 0;
-      }
     }
     else if(move == 'q')
     {
