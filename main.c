@@ -2,7 +2,7 @@
 
 int main()
 {
-  char choice, filename[20], choice2;
+  char choice, filename[20], choice2, continue;
   int size, i, j, xp, yp, xe, ye;
   FILE *f;
   cell **map;
@@ -81,7 +81,9 @@ int main()
 
   printf("\nLegend:\nP -> player\nN -> enemy\nE -> exit\n# -> wall\n  -> viable passage\n");
   printf("\nEnter the following letters to move:\nw -> up\ns -> down\nd -> right\na -> left\nq -> quit\n\nPress enter to confirm your move. It may be necessary to insert the same letter twice before before pressing enter.\n");
-
+  printf("Press Enter to continue\n");
+  scanf("%c", &continue);
+  
   movement(map, size, xp, yp, xe, ye, 0, 1);
 
   return 0;
