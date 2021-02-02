@@ -1,6 +1,11 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<time.h>
+#ifdef _WIN32
+  #define CLEARSCREEN system("cls")
+#else
+  #define CLEARSCREEN system("clear")
+#endif
 
 typedef struct{
   int visited; // if the cell has been visited, this value is 1
